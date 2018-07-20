@@ -16,10 +16,8 @@ let auth = {
 let cryptAuth = cryptr.encrypt(JSON.stringify(auth));
 
 let options = {
-	uri: 'http://localhost:3000/crypto/',
+	uri: 'http://localhost:3000/myki/balance',
 	headers : {
-		'x-Username': cryptoUser,
-		'x-Password': cryptoPword,
 		'x-Authorisation': cryptAuth
 	},
 	json: true
@@ -30,17 +28,3 @@ rp(options)
 	console.log(response);
 })
 .catch((e) => {console.log(e)});
-
-/*
-rp(`http://localhost:3000/crypto/${cryptoUser}/${cryptoPword}`)
-.then((response) => {
-	console.log(response);
-})
-.catch((e) => {console.log(e)});
-
-rp(`http://localhost:3000/myki/${username}/${password}`)
-.then((response) => {
-	console.log(response);
-})
-.catch((e) => {console.log(e)});
-*/
