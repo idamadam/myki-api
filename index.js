@@ -7,45 +7,18 @@ const myki = require('./balance.js');
 
 const app = express();
 
-app.get('/myki/:username/:password', function(req,res){
-	console.log(req.params.username + " " + req.params.password);
+app.get('/myki/balance', function(req, res) {
+	auth = JSON.parse(cryptr.decrypt(req.headers['x-authorisation']));
 	
-	let username = req.params.username;
-	let password = req.params.password;
+	console.log(auth.username + " " + auth.password);
 	
-	var balance = myki.getBalance(username, password)
-				  .then((result) => {
-				  	res.send(result);
-			      })
-			      .catch((error) => {
-			      	res.sendStatus(401);
-			      });
-
-});
-
-app.get('/crypto/:username/:password', function(req, res) {
-	let username = cryptr.decrypt(req.params.username);
-	let password = cryptr.decrypt(req.params.password);
-	
-	console.log(req.params.username + " " + req.params.password);
-	console.log(username + " " + password);
-	
-	var balance = myki.getBalance(username, password)
+	var balance = myki.getBalance(auth.username, auth.password)
 			  .then((result) => {
 			  	res.json({'balance': result});
 		      })
 		      .catch((error) => {
 		      	res.sendStatus(401).json({"error": "forbidden"});
 		      });
-
-});
-
-app.get('/crypto', function(req, res) {
-	auth = cryptr.decrypt(req.headers['x-authorisation'])
-	
-	console.log(auth);
-	
-	res.send(req.headers)
 })
 
 app.listen(3000);
