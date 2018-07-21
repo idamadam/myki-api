@@ -39,9 +39,9 @@ async function getBalance(username, password) {
 		}, BALANCE_SELECTOR);
 		
 	}
-	
-	return balance;
+
 	browser.close();
+	return balance;
 }
 
 module.exports = {
