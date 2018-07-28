@@ -1,17 +1,13 @@
 const express = require('express');
-
-const Cryptr = require('cryptr');
-const cryptr = new Cryptr('myTotalySecretKey');
-
+const bodyParser = require('body-parser');
 const myki = require('./balance.js');
 
 const app = express();
+const jsonParser = bodyParser.json();
 
-app.get('/myki/balance', function(req, res) {
-	auth = JSON.parse(cryptr.decrypt(req.headers['x-authorisation']));
-	
-	console.log(auth.username + " " + auth.password);
-	
+app.post('/myki/balance', jsonParser, function(req, res) {
+	let auth = req.body
+
 	var balance = myki.getBalance(auth.username, auth.password)
 			  .then((result) => {
 			  	res.json({'balance': result});
@@ -19,6 +15,11 @@ app.get('/myki/balance', function(req, res) {
 		      .catch((error) => {
 		      	res.sendStatus(401).json({"error": "forbidden"});
 		      });
+})
+
+app.post('/debug', jsonParser, function(req, res) {
+	console.log(req.body);
+	res.sendStatus(200);
 })
 
 app.listen(3000);
