@@ -5,10 +5,6 @@ const myki = require('./balance.js');
 const app = express();
 const jsonParser = bodyParser.json();
 
-let debugResponse = {
-	response: "hello"
-}
-
 app.post('/myki/balance', jsonParser, function(req, res) {
 	let auth = req.body;
 
@@ -27,12 +23,6 @@ app.post('/myki/balance', jsonParser, function(req, res) {
 			res.status(503).json({"error": error})
 		}
 	});
-})
-
-app.post('/debug', jsonParser, function(req, res) {
-	console.log("Debug Request")
-	console.log(req.body);
-	res.send(JSON.stringify(debugResponse));
 })
 
 app.listen(3000);
