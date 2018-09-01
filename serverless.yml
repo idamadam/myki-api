@@ -1,4 +1,4 @@
-service: gcloud-puppeteer
+service: myki-api
 
 provider:
   name: google
