@@ -6,7 +6,7 @@ exports.getBalance = async (req, res) => {
 	let auth = req.body
 
 	if (!auth.username || !auth.password) {
-		return res.send('Please provide username and password');
+		return res.status(401).json({"error": "Please provide username and password"});
 	}
 
 	myki.startSession(auth.username, auth.password)
