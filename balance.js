@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 
 async function startSession(username, password) {
-	const browser =  await puppeteer.launch({ headless: true});
+    const browser = await puppeteer.launch({args: ['--no-sandbox']});
 	const page = await browser.newPage();
 
 	await page.goto('https://www.mymyki.com.au/NTSWebPortal/Login.aspx');
