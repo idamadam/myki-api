@@ -3,7 +3,7 @@ service: myki-api
 provider:
   name: google
   project: myki-api
-  credentials: ~/.gcloud/keyfile.json
+  credentials: ~/.gcloud/myki-api.json
   region: asia-northeast1
   runtime: nodejs8
   memorySize: 1024
