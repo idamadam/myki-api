@@ -6,7 +6,7 @@ provider:
   credentials: ~/.gcloud/myki-api.json
   region: asia-northeast1
   runtime: nodejs8
-  memorySize: 1024
+  memorySize: 2048
 
 plugins:
   - serverless-google-cloudfunctions
