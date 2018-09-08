@@ -1,7 +1,7 @@
 'use strict';
 
 const myki = require('./balance.js');
-const fastMyki = require('./fastBalance')
+const fastMyki = require('./fastBalance');
 
 exports.getBalance = async (req, res) => {
 	let auth = req.body
@@ -28,6 +28,13 @@ exports.getBalance = async (req, res) => {
 }
 
 exports.fastBalance = async (req, res) => {
-	let balance = await fastMyki.checkBalance();
-	res.json({'balance': balance});
+	let auth = req.body;
+
+	try {
+		let balance = await fastMyki.checkBalance(auth.username, auth.password);
+		res.json({'balance': balance});
+	} catch(e) {
+		res.status(403).json({"error": e.message})
+	}
+
 }
