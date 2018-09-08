@@ -48,31 +48,34 @@ let balanceOptions = {
 }
 
 async function checkBalance(username, password) {
-    try {
-        loginForm["ctl00$uxContentPlaceHolder$uxUsername"] = username;
-        loginForm["ctl00$uxContentPlaceHolder$uxPassword"] = password;
     const cookieJar = rp.jar();
 
-        let login = await rp(loginOptions);
-    
-        let redirectUrl = login.request.uri.pathname;
-        const success = '/NTSWebPortal/Registered/MyMykiAccount.aspx';
-        const fail = '/ntswebportal/login.aspx';
-    
-        if (redirectUrl == success) {
-            const $ = await rp(balanceOptions);
-            let result = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
-            
-            return result;
     loginOptions.jar = cookieJar;
     balanceOptions.jar = cookieJar;
-        
-        } else if (redirectUrl == fail) {
-            throw new Error('Login failed');
-        }
 
-    } catch(e) {
-        console.error(e);
+    loginForm["ctl00$uxContentPlaceHolder$uxUsername"] = username;
+    loginForm["ctl00$uxContentPlaceHolder$uxPassword"] = password;
+
+    let login = await rp(loginOptions);
+
+    let redirectUrl = login.request.uri.pathname;
+    const success = '/NTSWebPortal/Registered/MyMykiAccount.aspx';
+
+    if (redirectUrl == success) {
+        const $ = await rp(balanceOptions);
+        let result = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
+        
+        return result;
+    
+    } else {
+        const $ = cheerio.load(login.body);
+        let errorMessage = $('#uxservererror').text().trim();
+
+        if (errorMessage == "Invalid Username/Password.") {
+            throw new Error(errorMessage)
+        } else {
+            throw new Error("Login failed");
+        }
     }
 }
 
