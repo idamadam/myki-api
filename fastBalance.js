@@ -1,8 +1,6 @@
 const rp = require('request-promise-native');
 const cheerio = require('cheerio');
 
-const cookieJar = rp.jar();
-
 let loginForm = {
     __LASTFOCUS: '',
     __EVENTTARGET: '',
@@ -31,7 +29,6 @@ let balanceForm = {
 
 let loginOptions = {
     uri: `https://www.mymyki.com.au/ntswebportal/login.aspx`,
-    jar: cookieJar,
     form: loginForm,
     method: 'POST',
     simple: false,
@@ -41,7 +38,6 @@ let loginOptions = {
 
 let balanceOptions = {
     uri: `https://www.mymyki.com.au/NTSWebPortal/Registered/MyMykiAccount.aspx?menu=My+myki+account`,
-    jar: cookieJar,
     form: balanceForm,
     method: 'POST',
     simple: false,
@@ -55,6 +51,7 @@ async function checkBalance(username, password) {
     try {
         loginForm["ctl00$uxContentPlaceHolder$uxUsername"] = username;
         loginForm["ctl00$uxContentPlaceHolder$uxPassword"] = password;
+    const cookieJar = rp.jar();
 
         let login = await rp(loginOptions);
     
@@ -67,6 +64,8 @@ async function checkBalance(username, password) {
             let result = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
             
             return result;
+    loginOptions.jar = cookieJar;
+    balanceOptions.jar = cookieJar;
         
         } else if (redirectUrl == fail) {
             throw new Error('Login failed');
