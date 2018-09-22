@@ -11,3 +11,4 @@ exports.getBalance = async (req, res) => {
 	} catch(e) {
 		res.status(403).json({"error": e.message})
 	}
+}
