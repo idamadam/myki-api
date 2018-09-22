@@ -24,7 +24,3 @@ functions:
     handler: getBalance
     events:
       - http: path
-  fastBalance:
-    handler: fastBalance
-    events:
-      - http: path
