@@ -1,26 +1,25 @@
 service: myki-api
 
 provider:
-  name: google
+  name: aws
   project: myki-api
-  credentials: ~/.gcloud/myki-api.json
-  region: asia-northeast1
-  runtime: nodejs8
-  memorySize: 2048
-
-plugins:
-  - serverless-google-cloudfunctions
+  region: ap-southeast-2
+  runtime: nodejs8.10
+  stage: dev
 
 # needs more granular excluding in production as only the serverless provider npm
 # package should be excluded (and not the whole node_modules directory)
-package:
-  exclude:
-    - node_modules/**
-    - .gitignore
-    - .git/**
+# package:
+#   exclude:
+#     - node_modules/**
+#     - .gitignore
+#     - .git/**
 
 functions:
   getBalance:
-    handler: getBalance
+    handler: handler.getBalance
     events:
-      - http: path
+        - http: 
+            path: myki/balance
+            method: post
+
