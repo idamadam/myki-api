@@ -88,8 +88,6 @@ async function checkBalance(username, password) {
         balanceForm = Object.assign(loginViewState, balanceForm);
         balanceOptions.form = balanceForm;
 
-        console.log("Successful login");
-
         let balanceSnippet = await rp(balanceOptions);
         console.log(`[BALANCE-SUCCESS] Successfully loaded balance`)
         let $ = cheerio.load(balanceSnippet);
