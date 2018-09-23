@@ -67,6 +67,8 @@ async function checkBalance(username, password) {
     balanceOptions.jar = cookieJar;
 
     let initialRequest = await rp(initialRequestOptions);
+    console.log("[INIT] First request made");
+
     let initialViewState = getAspxParams(initialRequest.body);
 
     loginForm = Object.assign(initialViewState, loginForm);
@@ -80,6 +82,8 @@ async function checkBalance(username, password) {
     const success = '/NTSWebPortal/Registered/MyMykiAccount.aspx';
 
     if (redirectUrl == success) {
+        console.log(`[LOGIN-SUCCESS] username: ${username} successfully logged in`);
+
         loginViewState = getAspxParams(login.body);
         balanceForm = Object.assign(loginViewState, balanceForm);
         balanceOptions.form = balanceForm;
@@ -87,6 +91,7 @@ async function checkBalance(username, password) {
         console.log("Successful login");
 
         let balanceSnippet = await rp(balanceOptions);
+        console.log(`[BALANCE-SUCCESS] Successfully loaded balance`)
         let $ = cheerio.load(balanceSnippet);
 
         let result = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
@@ -98,11 +103,11 @@ async function checkBalance(username, password) {
         let errorMessage = $('#uxservererror').text().trim();
 
         if (errorMessage == "Invalid Username/Password.") {
-            console.log("Invalid login")
+            console.log(`[LOGIN-INVALID] username: ${username} tried login with invalid details`)
             throw new Error(errorMessage)
         } else {
-            console.error("Login process failure")
-            throw new Error("Login failed");
+            console.error(`[LOGIN-FAILURE] username: ${username} login server failed`)
+            throw new Error("Login failed")
         }
     }
 }
