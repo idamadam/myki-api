@@ -3,9 +3,9 @@
 const myki = require('./balance.js');
 
 module.exports.getBalance = async (event, context) => {
-	let auth = event.body;
-
 	try {
+		let auth = JSON.parse(event.body);
+
 		let balance = await myki.checkBalance(auth.username, auth.password);
 		let messageBody = JSON.stringify({
 			balance: balance
