@@ -74,20 +74,17 @@ async function checkBalance(username, password) {
     loginForm["ctl00$uxContentPlaceHolder$uxPassword"] = password;
     loginOptions.form = loginForm;
 
-    console.log(loginOptions);
-
-    console.log(`Logging in as ${username} with ${password}`);
-
     let login = await rp(loginOptions);
 
     let redirectUrl = login.request.uri.pathname;
-    console.log(`Redirect URL was ${redirectUrl}`)
     const success = '/NTSWebPortal/Registered/MyMykiAccount.aspx';
 
     if (redirectUrl == success) {
         loginViewState = getAspxParams(login.body);
         balanceForm = Object.assign(loginViewState, balanceForm);
-        balanceOptions.form = balanceForm
+        balanceOptions.form = balanceForm;
+
+        console.log("Successful login");
 
         let balanceSnippet = await rp(balanceOptions);
         let $ = cheerio.load(balanceSnippet);
@@ -97,14 +94,14 @@ async function checkBalance(username, password) {
         return result;
     
     } else {
-        console.log(cookieJar.getCookies('https://www.mymyki.com.au'));
-        console.log(login.body);
         const $ = cheerio.load(login.body);
         let errorMessage = $('#uxservererror').text().trim();
 
         if (errorMessage == "Invalid Username/Password.") {
+            console.log("Invalid login")
             throw new Error(errorMessage)
         } else {
+            console.error("Login process failure")
             throw new Error("Login failed");
         }
     }
