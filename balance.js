@@ -59,7 +59,15 @@ async function checkBalance(username, password) {
         console.log(`[BALANCE-SUCCESS] Successfully loaded balance`)
         let $ = cheerio.load(balanceSnippet);
 
-        let result = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
+        let accountHolder = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim();
+        let money = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
+        let pass = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(4)').text().trim();
+
+        let result = {
+            "accountHolder": accountHolder,
+            "money": money,
+            "pass": pass
+        }
         
         return result;
     
