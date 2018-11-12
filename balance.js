@@ -71,7 +71,7 @@ async function checkBalance(username, password) {
             console.log(`[LOGIN-INVALID] username: ${username} tried login with invalid details`)
             throw new Error(errorMessage)
         } else {
-            console.error(`[LOGIN-FAILURE] username: ${username} login server failed`)
+            console.error(`[LOGIN-FAILURE] username: ${username} login failed with unknown error`)
             throw new Error("Login failed")
         }
     }
