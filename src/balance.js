@@ -60,11 +60,16 @@ async function checkBalance(username, password) {
         let $ = cheerio.load(balanceSnippet);
 
         let accountHolder = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(2)').text().trim();
-        let money = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
-        let pass = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(4)').text().trim();
+        let cardNumber = $('#ctl00_uxContentPlaceHolder_uxMyCards_ctl02_uxManageMyki').text().trim();
+        let moneyValue = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(3)').text().trim();
+        let passValue = $('#ctl00_uxContentPlaceHolder_uxMyCards > tbody > tr:nth-child(2) > td:nth-child(4)').text().trim();
+
+        let money = ( moneyValue != '' ) ? moneyValue : null
+        let pass = ( passValue != '' ) ? passValue : null
 
         let result = {
             "accountHolder": accountHolder,
+            "cardNumber": cardNumber,
             "money": money,
             "pass": pass
         }

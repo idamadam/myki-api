@@ -1,6 +1,6 @@
 'use strict';
 
-const myki = require('./balance.js');
+const myki = require('./src/balance.js');
 
 module.exports.getBalance = async (event, context) => {
 	try {
